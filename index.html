@@ -142,10 +142,11 @@
 
           document.getElementById("add").addEventListener("click", function(y) {
             const array = buildArray()
+            const films = document.getElementsByClassName("box");
             const list = document.getElementById('list')
             const name = document.getElementById("input").value
             newObj = []
-            newObj["elementId"] = 11
+            newObj["elementId"] = films.length
             newObj["firstLetter"] = name[0]
             newObj["name"] = name
             buildHTML(newObj)
