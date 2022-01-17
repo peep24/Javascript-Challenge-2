@@ -30,6 +30,7 @@
         border-radius: 10px;
         display: flex;
         justify-content: center;
+        align-items: center;
         line-height: 50px;
 
     }
@@ -66,7 +67,7 @@
         width: 400px;
       }
 
-      button {
+      #add, #reset, #random {
         background-color: #4CAF50; /* Green */
         border: none;
         color: white;
@@ -79,6 +80,20 @@
         border-radius: 10px;
         width: 200px;
         margin: 0 auto 10px auto;
+      }
+
+      .delete {
+        margin-left: 10px;  
+        background-color: rgb(255, 255, 255, 0.5); /* Green */
+        border: none;
+        color: black;
+        text-align: center;
+        text-decoration: none;
+        font-size: 10px;
+        border-radius: 10px;
+        width: 70px;
+        height: 30px;
+
       }
 
     ul {
@@ -101,16 +116,16 @@
 
 
     <ul id="list">
-        <li id="10" class="box">Jurassic Park</li>
-        <li id="4" class="box">Die Hard</li>
-        <li id="3" class="box">Cult of Chucky</li>
-        <li id="7" class="box">Goldeneye</li>
-        <li id="2" class="box">Bambi</li>
-        <li id="9" class="box">It</li>
-        <li id="8" class="box">Hereditary</li>
-        <li id="6" class="box">Forrest Gump</li>
-        <li id="1" class="box">Alien</li>
-        <li id="5" class="box">Equilibrium</li>
+        <li id="10" class="box"><span>Jurassic Park</span><button class="delete">Delete</button></li>
+        <li id="4" class="box"><span>Die Hard</span> <button class="delete">Delete</button></li>
+        <li id="3" class="box"><span>Cult of Chucky</span> <button class="delete">Delete</button></li>
+        <li id="7" class="box"><span>Goldeneye</span> <button class="delete">Delete</button></li>
+        <li id="2" class="box"><span>Bambi</span> <button class="delete">Delete</button></li>
+        <li id="9" class="box"><span>It</span> <button class="delete">Delete</button></li>
+        <li id="8" class="box"><span>Hereditary</span> <button class="delete">Delete</button></li>
+        <li id="6" class="box"><span>Forrest Gump</span> <button class="delete">Delete</button></li>
+        <li id="1" class="box"><span>Alien</span> <button class="delete">Delete</button></li>
+        <li id="5" class="box"><span>Equilibrium</span> <button class="delete">Delete</button></li>
 
     </ul>
 
@@ -146,9 +161,17 @@
             ListElement.classList.add("box")
             ListElement.id = films.length + 1
             ListElement.style.top = (60 * films.length) + "px"
-            const newContent = document.createTextNode(obj.name)
-
+            const newContent = document.createElement('span')
+            newContent.textContent = obj.name
+            let button = document.createElement('button')
+            button.classList.add('delete')
+            button.textContent = "Delete"
+            button.addEventListener('click', function() {
+                this.parentElement.remove()
+                order(buildArray())
+            })
             ListElement.appendChild(newContent);
+            ListElement.appendChild(button);
             list.appendChild(ListElement)
             
           }
@@ -174,12 +197,11 @@
                 iterArray = []
                 iterArray["elementId"] = film.id
                 iterArray["firstLetter"] = film.textContent[0]
-                iterArray["name"] = film.textContent
+                iterArray["name"] = film.children[0].textContent
                 filmArray.push(iterArray)
             }
             return filmArray
           }
-
 
           function sortAtoZ(array) {
             const sortedarray = array.sort((a,b)=> (a.firstLetter > b.firstLetter ? 1 : -1))
@@ -217,12 +239,10 @@
         function search (){
             const array = buildArray()
             index = array.findIndex(x => x.name.toLowerCase() === input.value.toLowerCase());
-            
             if (index > 0) {
                 const newArr = array_move(array, index, 0)
                 order(newArr)
             }
-
         }
 
         document.addEventListener("DOMContentLoaded", function(event) {
@@ -235,10 +255,17 @@
         //to the change run search.
         input.addEventListener('input', search);
 
+        var deleteBtns = document.getElementsByClassName("delete")
+
+        for (var i = 0; i < deleteBtns.length; i++) {
+            deleteBtns[i].addEventListener('click', function() {
+                this.parentElement.remove()
+                order(buildArray())
+
+            })
+        }
+
     });
-
-
-
 
     </script>
     
