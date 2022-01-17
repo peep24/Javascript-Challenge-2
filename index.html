@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Notable&display=swap" rel="stylesheet">
+</head>
+<style>
+    body {
+        height: 100vh;
+        background: #606c88;  /* fallback for old browsers */
+        background: -webkit-linear-gradient(to right, #3f4c6b, #606c88);  /* Chrome 10-25, Safari 5.1-6 */
+        background: linear-gradient(to right, #3f4c6b, #606c88); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+        
+
+    }
+    .box {
+        font-family: 'Notable', sans-serif;
+        position: absolute;
+        left: 50%;
+        transform: translate(-50%);
+        width: 300px;
+        height: 50px;
+        list-style: none;
+        transition: top 1s ease-out;
+        border-radius: 10px;
+        display: flex;
+        justify-content: center;
+        line-height: 50px;
+
+    }
+
+
+    .box:nth-of-type(3n+1) {
+        background-color: rgba(255,0,0,0.6);
+    }
+    
+    .box:nth-of-type(3n+2) {
+        background-color: rgba(255,255,0,0.6);
+    }
+    
+    .box:nth-of-type(3n+3) {
+        background-color: rgba(0,255,255,0.6);
+    }
+
+    #search {
+        display: flex;
+        flex-direction: column;
+        width: 40vw;
+        margin: auto;
+        
+    }
+
+    input[type=text] {
+        background-color: white;
+        background-image: url('https://www.w3schools.com/css/searchicon.png');
+        background-position: 10px 10px;
+        background-repeat: no-repeat;
+        padding-left: 40px;
+        height: 40px;
+        margin: 30px auto 20px auto;
+        width: 400px;
+      }
+
+      button {
+        background-color: #4CAF50; /* Green */
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin-bottom: 10px;
+        border-radius: 10px;
+        width: 200px;
+        margin: 0 auto 10px auto;
+      }
+
+    ul {
+        margin-top: 0;
+        height: 100vh;
+        position: relative;
+        overflow: hidden;
+    }
+
+
+</style>
+<body>
+
+    <form id="search" action="">
+        <input id="input" type="text">
+        <button id="add">Add Film</button>
+        <button id="reset">A-Z</button>
+        <button id="random">Random</button>
+    </form>
+
+
+    <ul id="list">
+        <li id="10" class="box">Jurassic Park</li>
+        <li id="4" class="box">Die Hard</li>
+        <li id="3" class="box">Cult of Chucky</li>
+        <li id="7" class="box">Goldeneye</li>
+        <li id="2" class="box">Bambi</li>
+        <li id="9" class="box">It</li>
+        <li id="8" class="box">Hereditary</li>
+        <li id="6" class="box">Forrest Gump</li>
+        <li id="1" class="box">Alien</li>
+        <li id="5" class="box">Equilibrium</li>
+
+    </ul>
+
+
+    <script>
+
+        document.getElementById("reset").addEventListener("click", function(y) {
+            sortAtoZ(buildArray())
+          });
+
+          document.getElementById("random").addEventListener("click", function(y) {
+            shuffleArray(buildArray())
+          });
+
+          document.getElementById("add").addEventListener("click", function(y) {
+            const array = buildArray()
+            const list = document.getElementById('list')
+            const name = document.getElementById("input").value
+            newObj = []
+            newObj["elementId"] = 11
+            newObj["firstLetter"] = name[0]
+            newObj["name"] = name
+            buildHTML(newObj)
+
+          });
+
+
+          function buildHTML(obj) {
+            var top = 0;
+            const films = document.getElementsByClassName("box");
+            const list = document.getElementById('list')
+            let ListElement = document.createElement('li')
+            ListElement.classList.add("box")
+            ListElement.id = films.length + 1
+            ListElement.style.top = (60 * films.length) + "px"
+            const newContent = document.createTextNode(obj.name)
+
+            ListElement.appendChild(newContent);
+            list.appendChild(ListElement)
+            
+          }
+
+          function order(array) {
+            var top = 0;
+            for (const film of array) {
+                let target = document.getElementById(film['elementId'])
+                target.style.top = top + "px"
+                top += 60
+            }
+          }
+
+          function initialize() {
+            order(buildArray())
+          }
+
+
+          function buildArray() {
+            const films = document.getElementsByClassName("box");
+            filmArray = [];
+            for (const film of films) {
+                iterArray = []
+                iterArray["elementId"] = film.id
+                iterArray["firstLetter"] = film.textContent[0]
+                iterArray["name"] = film.textContent
+                filmArray.push(iterArray)
+            }
+            return filmArray
+          }
+
+
+          function sortAtoZ(array) {
+            const sortedarray = array.sort((a,b)=> (a.firstLetter > b.firstLetter ? 1 : -1))
+            order(sortedarray)
+          }
+
+          function shuffleArray(array) {
+            for (var i = array.length - 1; i > 0; i--) {
+                var j = Math.floor(Math.random() * (i + 1));
+                var temp = array[i];
+                array[i] = array[j];
+                array[j] = temp;
+            }
+            order(array);
+        }
+
+        function array_move(arr, old_index, new_index) {
+            if (new_index >= arr.length) {
+                var k = new_index - arr.length + 1;
+                while (k--) {
+                    arr.push(undefined);
+                }
+            }
+            arr.splice(new_index, 0, arr.splice(old_index, 1)[0]);
+            return arr;
+        };
+
+
+        //get input
+        let input = document.getElementById("input");
+        //get list of value
+        let list = document.querySelectorAll(".list li");
+
+        //function search on the list.
+        function search (){
+            const array = buildArray()
+            index = array.findIndex(x => x.name.toLowerCase() === input.value.toLowerCase());
+            
+            if (index > 0) {
+                const newArr = array_move(array, index, 0)
+                order(newArr)
+            }
+
+        }
+
+        document.addEventListener("DOMContentLoaded", function(event) {
+        initialize()
+
+        document.getElementById('search').addEventListener("submit", function(evt) {
+            evt.preventDefault();
+        }, true);
+
+        //to the change run search.
+        input.addEventListener('input', search);
+
+    });
+
+
+
+
+    </script>
+    
+
+
+</body>
+</html>
